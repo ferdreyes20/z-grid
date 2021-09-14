@@ -45,10 +45,10 @@ export class ColumnFilterComponent implements OnInit, AfterViewInit {
   constructor(private renderer: Renderer2, private zone: NgZone) {
     this.products = [
       {
-        ProductID: 1,
+        Id: 1,
       },
       {
-        ProductID: 2,
+        Id: 2,
       },
     ];
     this.gridData = process(this.products, this.state);

@@ -1,7 +1,7 @@
 <kendo-grid [data]="gridData" [height]="410" [rowClass]="rowCallback" (dataStateChange)="dataStateChange($event)">
     <kendo-grid-column field="ProductID" title="ID" width="40">
         <ng-template kendoGridCellTemplate let-dataItem>
-            <strong>potaena naman</strong>
+            <strong><input type="checkbox"/> potaena {{dataItem.Id}}</strong>
           </ng-template>
     </kendo-grid-column> 
 </kendo-grid>
