@@ -1,0 +1,9 @@
+<kendo-grid [data]="gridData" [height]="410" [rowClass]="rowCallback" (dataStateChange)="dataStateChange($event)">
+    <kendo-grid-column field="ProductID" title="ID" width="40">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <strong>potaena naman</strong>
+          </ng-template>
+    </kendo-grid-column> 
+</kendo-grid>
+
+<pre>{{gridData | json}}</pre>

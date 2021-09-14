@@ -1,0 +1,47 @@
+<div class="multiselect-dropdown">
+  <label>{{ dropdownLabel }}</label>
+  <div #dropdownAnchor>
+    <kendo-multiselect
+      [textField]="'text'"
+      [valueField]="'value'"
+      (open)="isOpen($event)"
+      [value]="selectedItems"
+    >
+    </kendo-multiselect>
+  </div>
+
+  <!-- Popup -->
+  <kendo-popup
+    [anchor]="dropdownAnchor"
+    [anchorAlign]="anchorAlign"
+    [popupAlign]="popupAlign"
+    (anchorViewportLeave)="show = false"
+    *ngIf="showDropdown"
+  >
+    <div class="content dropdown-content">
+      <div class="dropdown-input">
+        <kendo-textbox placeholder="All" [clearButton]="true"> </kendo-textbox>
+      </div>
+      <div class="dropdown-list">
+        <kendo-treeview
+          [nodes]="dropdownItems"
+          [textField]="'text'"
+          [loadOnDemand]="false"
+          kendoTreeViewExpandable
+          kendoTreeViewHierarchyBinding
+          [childrenField]="'items'"
+          kendoTreeViewCheckable
+          [(checkedKeys)]="checkedKeys"
+          [valueField]="'value'"
+          [filterable]="true"
+        >
+          <ng-template kendoTreeViewNodeTemplate let-dataItem>
+            {{ dataItem.text }}
+          </ng-template>
+        </kendo-treeview>
+      </div>
+    </div>
+  </kendo-popup>
+</div>
+
+{{ checkedKeys | json }}
