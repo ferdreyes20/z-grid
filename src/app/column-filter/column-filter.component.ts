@@ -1,8 +1,11 @@
 import {
   AfterViewInit,
   Component,
+  EventEmitter,
+  Input,
   NgZone,
   OnInit,
+  Output,
   Renderer2,
   ViewEncapsulation,
 } from "@angular/core";
@@ -10,6 +13,7 @@ import { RowClassArgs } from "@progress/kendo-angular-grid";
 import { State, process } from "@progress/kendo-data-query";
 import { fromEvent, Subscription } from "rxjs";
 import { tap, take } from "rxjs/operators";
+import { Column, IColumn, IOutputColumnFilter } from "../column.model";
 
 const tableRow = (node) => node.tagName.toLowerCase() === "tr";
 const closest = (node, predicate) => {
@@ -25,34 +29,24 @@ const closest = (node, predicate) => {
   templateUrl: "./column-filter.component.html",
   styleUrls: ["./column-filter.component.scss"],
   encapsulation: ViewEncapsulation.None,
-  styles: [
-    `
-      .k-grid tr.dragging {
-        background-color: #f45c42;
-      }
-    `,
-  ],
 })
 export class ColumnFilterComponent implements OnInit, AfterViewInit {
-  public products: any[] = [];
+  @Input("columns") columns: Column[] = [];
+  @Output() action: EventEmitter<IOutputColumnFilter> =
+    new EventEmitter<IOutputColumnFilter>();
+  @Output() checkboxChanged: EventEmitter<IColumn> =
+    new EventEmitter<IColumn>();
+  @Output() sortChanged: EventEmitter<IOutputColumnFilter> =
+    new EventEmitter<IOutputColumnFilter>();
+
   public state: State = {
     skip: 0,
     take: 10,
   };
-  public gridData: any = process(this.products, this.state);
+  public gridData: any = process(this.columns, this.state);
   private currentSubscription: Subscription;
 
-  constructor(private renderer: Renderer2, private zone: NgZone) {
-    this.products = [
-      {
-        Id: 1,
-      },
-      {
-        Id: 2,
-      },
-    ];
-    this.gridData = process(this.products, this.state);
-  }
+  constructor(private renderer: Renderer2, private zone: NgZone) {}
 
   public ngAfterViewInit(): void {
     this.currentSubscription = this.handleDragAndDrop();
@@ -64,7 +58,7 @@ export class ColumnFilterComponent implements OnInit, AfterViewInit {
 
   public dataStateChange(state: State): void {
     this.state = state;
-    this.gridData = process(this.products, this.state);
+    this.gridData = process(this.columns, this.state);
     this.currentSubscription.unsubscribe();
     this.zone.onStable
       .pipe(take(1))
@@ -77,7 +71,9 @@ export class ColumnFilterComponent implements OnInit, AfterViewInit {
     };
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.gridData = process(this.columns, this.state);
+  }
 
   private handleDragAndDrop(): Subscription {
     const sub = new Subscription(() => {});
@@ -140,10 +136,23 @@ export class ColumnFilterComponent implements OnInit, AfterViewInit {
           e.preventDefault();
           const dataItem = this.gridData.data[draggedItemIndex];
           dataItem.dragging = false;
+          this.sortChanged.emit(this.gridData);
         })
       );
     });
 
     return sub;
+  }
+
+  public changeInCheckbox(dataItem: any): void {
+    dataItem.isChecked = !dataItem.isChecked;
+    this.checkboxChanged.emit(dataItem);
+  }
+
+  public update(): void {
+    this.action.emit({
+      actionName: "update",
+      columns: this.gridData,
+    } as IOutputColumnFilter);
   }
 }

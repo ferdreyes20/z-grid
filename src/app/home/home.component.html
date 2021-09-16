@@ -1,1 +1,4 @@
-<column-filter></column-filter>
+<column-filter 
+    [columns]="columns" 
+    (action)="outputColumnFilter($event)"
+></column-filter>

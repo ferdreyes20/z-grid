@@ -1,0 +1,36 @@
+.k-grid-header {
+  display: none !important;
+}
+
+.k-grid tr.k-alt {
+  background-color: white;
+}
+
+.k-grid td:first-child {
+  border-top-width: 0;
+}
+
+.k-grid-content tr:last-child > td {
+  border-bottom-width: 1px;
+}
+
+.k-grid td {
+  border-width: 1px;
+}
+
+.k-grid tr.dragging {
+  background-color: darkslategray;
+}
+
+.column-filter {
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 5px;
+  width: 250px;
+}
+
+.column-filter-title {
+  margin-bottom: 5px;
+  font-size: larger;
+  font-weight: bold;
+}

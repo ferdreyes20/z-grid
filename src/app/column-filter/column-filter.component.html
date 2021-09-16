@@ -1,9 +1,16 @@
-<kendo-grid [data]="gridData" [height]="410" [rowClass]="rowCallback" (dataStateChange)="dataStateChange($event)">
-    <kendo-grid-column field="ProductID" title="ID" width="40">
+<div [class]="'column-filter'">
+  <div [class]="'column-filter-title'">
+    <i [class]="'fa-solid fa-list-check'"></i>
+    <span>Columns and filters</span>
+  </div>
+  <kendo-grid [data]="gridData" [height]="410" [rowClass]="rowCallback" >
+    <kendo-grid-column width="40">
         <ng-template kendoGridCellTemplate let-dataItem>
-            <strong><input type="checkbox"/> potaena {{dataItem.Id}}</strong>
+                <strong><input type="checkbox" [checked]="dataItem.isChecked" (change)="catchChangeInCheckbox(dataItem)"/> {{dataItem.name}}</strong>
           </ng-template>
     </kendo-grid-column> 
 </kendo-grid>
+<div [class]="'column-filter-buttons'"></div>
+</div>
 
 <pre>{{gridData | json}}</pre>
